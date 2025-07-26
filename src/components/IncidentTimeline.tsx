@@ -78,7 +78,7 @@ export default function IncidentTimeline({
         </div>
         
         <div className="space-y-4">
-          {cameraList.map((camera, cameraIndex) => (
+          {cameraList.map((camera) => (
             <div key={camera.id} className="flex items-center space-x-4">
               <div className="w-28 text-sm text-white flex-shrink-0 flex items-center space-x-2">
                 <div className="w-3 h-3 bg-blue-400 rounded-full"></div>

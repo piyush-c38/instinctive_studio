@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { Play, Pause, SkipBack, SkipForward, Volume2, Maximize2 } from 'lucide-react'
 
 interface Camera {
   id: string
@@ -29,7 +28,6 @@ interface IncidentPlayerProps {
 }
 
 export default function IncidentPlayer({ incident, onIncidentSelect, incidents }: IncidentPlayerProps) {
-  const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
   const [isDragging, setIsDragging] = useState(false)
   const timelineRef = useRef<SVGSVGElement>(null)
