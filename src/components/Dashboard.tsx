@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { Play, SkipBack, SkipForward, Volume2, Maximize2 } from 'lucide-react'
 import Navbar from './Navbar'
 import IncidentPlayer from './IncidentPlayer'
 import IncidentList from './IncidentList'
@@ -99,18 +100,19 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a1530] text-white pb-64">
+    <div className="h-screen bg-[#0a1530] text-white flex flex-col overflow-hidden">
       <Navbar unresolvedCount={unresolvedIncidents.length} />
       
-      <div className="flex">
-        <div className="flex-1 p-6">
+      <div className="flex h-[55%]">
+        <div className="w-[55%] p-4">
           <IncidentPlayer 
             incident={selectedIncident}
             onIncidentSelect={setSelectedIncident}
+            incidents={incidents}
           />
         </div>
         
-        <div className="w-96 border-l border-gray-700">
+        <div className="w-[45%] border-l border-gray-700">
           <IncidentList 
             incidents={incidents}
             selectedIncident={selectedIncident}
@@ -120,12 +122,42 @@ export default function Dashboard() {
         </div>
       </div>
       
-      <IncidentTimeline 
-        incidents={incidents}
-        cameras={cameras}
-        onIncidentSelect={setSelectedIncident}
-        selectedIncident={selectedIncident}
-      />
+      <div className="h-[5%] bg-gray-900 border-t border-gray-700 flex items-center justify-center px-6">
+        <div className="flex items-center space-x-4">
+          <button className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition-colors">
+            <Play className="w-4 h-4" />
+          </button>
+          <button className="text-gray-400 hover:text-white p-1">
+            <SkipBack className="w-4 h-4" />
+          </button>
+          <button className="text-gray-400 hover:text-white p-1">
+            <SkipForward className="w-4 h-4" />
+          </button>
+          <div className="text-white text-sm font-mono">
+            03:12:37 (15-Jun-2025)
+          </div>
+          <div className="flex-1 mx-6">
+            <div className="w-full bg-gray-700 rounded-full h-1">
+              <div className="bg-blue-600 h-1 rounded-full" style={{ width: '35%' }}></div>
+            </div>
+          </div>
+          <button className="text-gray-400 hover:text-white p-1">
+            <Volume2 className="w-4 h-4" />
+          </button>
+          <button className="text-gray-400 hover:text-white p-1">
+            <Maximize2 className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+      
+      <div className="h-[35%] flex flex-col">
+        <IncidentTimeline 
+          incidents={incidents}
+          cameras={cameras}
+          onIncidentSelect={setSelectedIncident}
+          selectedIncident={selectedIncident}
+        />
+      </div>
     </div>
   )
 }

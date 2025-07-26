@@ -1,7 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-
 interface Camera {
   id: string
   name: string
@@ -34,8 +32,6 @@ export default function IncidentTimeline({
   onIncidentSelect, 
   selectedIncident 
 }: IncidentTimelineProps) {
-  const [isExpanded, setIsExpanded] = useState(false)
-
   const hours = Array.from({ length: 24 }, (_, i) => {
     const hour = String(i).padStart(2, '0')
     return `${hour}:00`
@@ -71,48 +67,26 @@ export default function IncidentTimeline({
 
   const cameraList = cameras.length > 0 ? cameras : mockCameras
 
-  if (!isExpanded) {
-    return (
-      <div className="fixed bottom-0 left-0 right-0 bg-gray-900/95 border-t border-gray-700">
-        <button
-          onClick={() => setIsExpanded(true)}
-          className="w-full p-4 text-left text-white hover:bg-gray-800/50 transition-colors"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="font-semibold">Camera List</h3>
-              <p className="text-sm text-gray-400">View incident timeline</p>
-            </div>
-            <div className="text-gray-400">▲</div>
-          </div>
-        </button>
-      </div>
-    )
-  }
-
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-gray-900/95 border-t border-gray-700 h-64">
-      <div className="p-4">
+    <div className="h-full bg-gray-900 border-t border-gray-700 flex flex-col">
+      <div className="p-4 flex-1 overflow-auto">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold text-white">Camera List</h3>
-          <button
-            onClick={() => setIsExpanded(false)}
-            className="text-gray-400 hover:text-white"
-          >
-            ▼
-          </button>
+          <div className="text-xs text-gray-400">
+            {hours[Math.floor(Date.now() / (1000 * 60 * 60)) % 24]} Timeline
+          </div>
         </div>
         
-        <div className="space-y-3">
+        <div className="space-y-4">
           {cameraList.map((camera, cameraIndex) => (
             <div key={camera.id} className="flex items-center space-x-4">
-              <div className="w-24 text-sm text-white flex-shrink-0 flex items-center space-x-2">
-                <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+              <div className="w-28 text-sm text-white flex-shrink-0 flex items-center space-x-2">
+                <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
                 <span>{camera.name}</span>
               </div>
               
               <div className="flex-1 relative">
-                <div className="h-8 bg-gray-800 rounded relative overflow-hidden">
+                <div className="h-10 bg-gray-800 rounded relative overflow-hidden">
                   <div className="absolute inset-0 flex">
                     {hours.map((hour, index) => (
                       <div
@@ -120,7 +94,7 @@ export default function IncidentTimeline({
                         className="flex-1 border-r border-gray-700 flex items-center justify-center text-xs text-gray-500"
                         style={{ borderRight: index === hours.length - 1 ? 'none' : undefined }}
                       >
-                        {index % 4 === 0 ? hour : ''}
+                        {index % 3 === 0 ? hour : ''}
                       </div>
                     ))}
                   </div>
@@ -131,7 +105,7 @@ export default function IncidentTimeline({
                       <div
                         key={incident.id}
                         onClick={() => onIncidentSelect(incident)}
-                        className={`absolute top-1 h-6 w-3 rounded cursor-pointer transition-all hover:scale-110 ${getIncidentColor(incident.type)} ${
+                        className={`absolute top-1 h-8 w-4 rounded cursor-pointer transition-all hover:scale-110 ${getIncidentColor(incident.type)} ${
                           selectedIncident?.id === incident.id ? 'ring-2 ring-white' : ''
                         } ${incident.resolved ? 'opacity-50' : ''}`}
                         style={{
@@ -141,7 +115,6 @@ export default function IncidentTimeline({
                       />
                     ))}
                   
-                  
                   <div className="absolute top-0 bottom-0 w-0.5 bg-yellow-400" style={{ left: '60%' }}>
                     <div className="absolute -top-1 -left-1 w-3 h-3 bg-yellow-400 rounded-full"></div>
                   </div>
@@ -150,7 +123,8 @@ export default function IncidentTimeline({
             </div>
           ))}
         </div>
-        <div className="mt-4 flex items-center space-x-6 text-xs text-gray-400">
+        
+        <div className="mt-6 flex items-center justify-center space-x-6 text-xs text-gray-400 border-t border-gray-700 pt-4">
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-orange-500 rounded"></div>
             <span>Unauthorised Access</span>

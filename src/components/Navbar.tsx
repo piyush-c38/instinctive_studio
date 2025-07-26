@@ -8,9 +8,8 @@ interface NavbarProps {
 
 export default function Navbar({ unresolvedCount }: NavbarProps) {
   return (
-    <nav className="bg-[#1e3a8a] border-b border-gray-700 px-6 py-4">
+    <nav className="bg-[#142555] border-b border-gray-700 px-6 py-4">
       <div className="flex items-center justify-between">
-        {/* Left side - Logo and Navigation */}
         <div className="flex items-center space-x-8">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-white text-[#1e3a8a] rounded flex items-center justify-center font-bold">
@@ -52,7 +51,6 @@ export default function Navbar({ unresolvedCount }: NavbarProps) {
         </div>
         
         <div className="flex items-center space-x-4">
-          {/* Incident counter */}
           <div className="flex items-center space-x-2">
             <div className="flex items-center space-x-2 text-red-400">
               <AlertTriangle className="w-4 h-4" />
@@ -64,7 +62,6 @@ export default function Navbar({ unresolvedCount }: NavbarProps) {
             </div>
           </div>
           
-          {/* User profile */}
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
               <User className="w-4 h-4 text-white" />
