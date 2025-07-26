@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
         camera: true,
       },
       orderBy: {
-        timestamp: 'desc',
+        createdAt: 'desc',
       },
     })
     

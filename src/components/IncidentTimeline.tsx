@@ -13,11 +13,10 @@ interface Incident {
   cameraId: string
   camera: Camera
   type: string
-  isStart: boolean
+  tsStart: string
   tsEnd: string | null
   thumbnailUrl: string
   resolved: boolean
-  timestamp: string
   createdAt: string
   updatedAt: string
 }
@@ -37,7 +36,6 @@ export default function IncidentTimeline({
 }: IncidentTimelineProps) {
   const [isExpanded, setIsExpanded] = useState(false)
 
-  // Generate timeline hours (24 hour period)
   const hours = Array.from({ length: 24 }, (_, i) => {
     const hour = String(i).padStart(2, '0')
     return `${hour}:00`
@@ -105,11 +103,9 @@ export default function IncidentTimeline({
           </button>
         </div>
         
-        {/* Timeline */}
         <div className="space-y-3">
           {cameraList.map((camera, cameraIndex) => (
             <div key={camera.id} className="flex items-center space-x-4">
-              {/* Camera name */}
               <div className="w-24 text-sm text-white flex-shrink-0 flex items-center space-x-2">
                 <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
                 <span>{camera.name}</span>
@@ -139,9 +135,9 @@ export default function IncidentTimeline({
                           selectedIncident?.id === incident.id ? 'ring-2 ring-white' : ''
                         } ${incident.resolved ? 'opacity-50' : ''}`}
                         style={{
-                          left: `${getPositionFromTime(incident.timestamp)}%`,
+                          left: `${getPositionFromTime(incident.tsStart)}%`,
                         }}
-                        title={`${incident.type} - ${new Date(incident.timestamp).toLocaleTimeString()}`}
+                        title={`${incident.type} - ${new Date(incident.tsStart).toLocaleTimeString()}`}
                       />
                     ))}
                   

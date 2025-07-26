@@ -9,20 +9,17 @@ interface Camera {
 }
 
 interface Incident {
-    id: string
-    cameraId: string
-    camera: Camera
-    type: string
-    isStart: boolean
-    tsEnd: string | null
-    thumbnailUrl: string
-    resolved: boolean
-    timestamp: string
-    createdAt: string
-    updatedAt: string
-}
-
-interface IncidentListProps {
+  id: string
+  cameraId: string
+  camera: Camera
+  type: string
+  tsStart: string
+  tsEnd: string | null
+  thumbnailUrl: string
+  resolved: boolean
+  createdAt: string
+  updatedAt: string
+}interface IncidentListProps {
     incidents: Incident[]
     selectedIncident: Incident | null
     onIncidentSelect: (incident: Incident) => void
@@ -99,14 +96,13 @@ export default function IncidentList({
                 </div>
             </div>
 
-            {/* Incident List */}
             <div className="flex-1 overflow-y-auto">
                 {incidents.map((incident) => (
                     <div
                         key={incident.id}
                         onClick={() => onIncidentSelect(incident)}
-                        className={`p-4 border-b border-gray-700/50 cursor-pointer transition-all hover:bg-gray-800/50 ${selectedIncident?.id === incident.id ? 'bg-blue-900/30 border-l-4 border-l-blue-400' : ''
-                            } ${incident.resolved ? 'opacity-60' : ''}`}
+                        className={`p-4 border-b border-gray-700/50 cursor-pointer transition-all duration-500 hover:bg-gray-800/50 ${selectedIncident?.id === incident.id ? 'bg-blue-900/30 border-l-4 border-l-blue-400' : ''
+                            } ${incident.resolved ? 'opacity-30 scale-95' : ''}`}
                     >
                         <div className="flex items-start space-x-3">
                             <div className="w-16 h-12 bg-gray-700 rounded flex-shrink-0 flex items-center justify-center">
@@ -132,7 +128,7 @@ export default function IncidentList({
 
                                 <div className="mt-1 flex items-center space-x-2 text-xs text-gray-400">
                                     <Clock className="w-3 h-3" />
-                                    <span>{formatTime(incident.timestamp)} on {formatDate(incident.timestamp)}</span>
+                                    <span>{formatTime(incident.tsStart)} on {formatDate(incident.tsStart)}</span>
                                 </div>
 
                                 {!incident.resolved && (

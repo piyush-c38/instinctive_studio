@@ -11,24 +11,24 @@ model Camera {
   id        String     @id @default(cuid())
   name      String
   location  String
-  incidents Incident[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+  incidents Incident[]
 
   @@map("cameras")
 }
 
 model Incident {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   cameraId     String
-  camera       Camera   @relation(fields: [cameraId], references: [id])
-  type         String   // "Unauthorised Access", "Gun Threat", "Face Recognised", "Traffic congestion", etc.
-  tsStart      DateTime @default(now())
+  type         String
+  tsStart      DateTime  @default(now())
   tsEnd        DateTime?
   thumbnailUrl String
-  resolved     Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  resolved     Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  camera       Camera    @relation(fields: [cameraId], references: [id])
 
   @@map("incidents")
 }

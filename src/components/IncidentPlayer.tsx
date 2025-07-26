@@ -14,11 +14,10 @@ interface Incident {
   cameraId: string
   camera: Camera
   type: string
-  isStart: boolean
+  tsStart: string
   tsEnd: string | null
   thumbnailUrl: string
   resolved: boolean
-  timestamp: string
   createdAt: string
   updatedAt: string
 }
@@ -51,13 +50,11 @@ export default function IncidentPlayer({ incident }: IncidentPlayerProps) {
 
   return (
     <div className="h-full flex flex-col">
-      {/* Video player area */}
       <div className="flex-1 bg-gray-900 rounded-lg overflow-hidden relative">
         <div className="absolute top-4 left-4 bg-black/50 text-white px-2 py-1 rounded text-sm">
-          {formatDate(incident.timestamp)} - {currentTime}
+          {formatDate(incident.tsStart)} - {currentTime}
         </div>
         
-        {/* Main video display */}
         <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center relative">
           <div className="w-full h-full bg-gray-800 flex items-center justify-center">
             <div className="text-6xl font-bold text-white/20">MANDATORY</div>
@@ -87,8 +84,6 @@ export default function IncidentPlayer({ incident }: IncidentPlayerProps) {
           </div>
         </div>
       </div>
-      
-      {/* Video controls */}
       <div className="mt-4 bg-gray-800/50 rounded-lg p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -123,7 +118,6 @@ export default function IncidentPlayer({ incident }: IncidentPlayerProps) {
           </div>
         </div>
         
-        {/* Progress bar */}
         <div className="mt-4">
           <div className="w-full bg-gray-700 rounded-full h-1">
             <div className="bg-blue-600 h-1 rounded-full" style={{ width: '35%' }}></div>

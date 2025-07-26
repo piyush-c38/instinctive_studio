@@ -17,11 +17,10 @@ interface Incident {
   cameraId: string
   camera: Camera
   type: string
-  isStart: boolean
+  tsStart: string
   tsEnd: string | null
   thumbnailUrl: string
   resolved: boolean
-  timestamp: string
   createdAt: string
   updatedAt: string
 }
@@ -52,24 +51,37 @@ export default function Dashboard() {
 
   const handleResolveIncident = async (incidentId: string) => {
     try {
+      setIncidents(prev => 
+        prev.map(incident => 
+          incident.id === incidentId 
+            ? { ...incident, resolved: !incident.resolved }
+            : incident
+        )
+      )
+      
+      if (selectedIncident?.id === incidentId) {
+        setSelectedIncident(prev => prev ? { ...prev, resolved: !prev.resolved } : null)
+      }
+      
       const response = await fetch(`/api/incidents/${incidentId}/resolve`, {
         method: 'PATCH',
       })
       
-      if (response.ok) {
-        const updatedIncident = await response.json()
+      if (!response.ok) {
         setIncidents(prev => 
           prev.map(incident => 
             incident.id === incidentId 
-              ? { ...incident, resolved: true }
+              ? { ...incident, resolved: !incident.resolved }
               : incident
           )
         )
         
         if (selectedIncident?.id === incidentId) {
-          setSelectedIncident(prev => prev ? { ...prev, resolved: true } : null)
+          setSelectedIncident(prev => prev ? { ...prev, resolved: !prev.resolved } : null)
         }
+        throw new Error('Failed to resolve incident')
       }
+      
     } catch (error) {
       console.error('Failed to resolve incident:', error)
     }
@@ -91,7 +103,6 @@ export default function Dashboard() {
       <Navbar unresolvedCount={unresolvedIncidents.length} />
       
       <div className="flex">
-        {/* left side - incident Player */}
         <div className="flex-1 p-6">
           <IncidentPlayer 
             incident={selectedIncident}
@@ -99,7 +110,6 @@ export default function Dashboard() {
           />
         </div>
         
-        {/* right side - incident List */}
         <div className="w-96 border-l border-gray-700">
           <IncidentList 
             incidents={incidents}
@@ -110,7 +120,6 @@ export default function Dashboard() {
         </div>
       </div>
       
-      {/* Bottom Timeline */}
       <IncidentTimeline 
         incidents={incidents}
         cameras={cameras}
