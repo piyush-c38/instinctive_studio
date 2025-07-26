@@ -23,11 +23,10 @@ model Incident {
   cameraId     String
   camera       Camera   @relation(fields: [cameraId], references: [id])
   type         String   // "Unauthorised Access", "Gun Threat", "Face Recognised", "Traffic congestion", etc.
-  isStart      Boolean  @default(true)
+  tsStart      DateTime @default(now())
   tsEnd        DateTime?
   thumbnailUrl String
   resolved     Boolean  @default(false)
-  timestamp    DateTime @default(now())
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
