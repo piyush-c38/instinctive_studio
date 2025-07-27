@@ -46,6 +46,54 @@ npm run dev
 
 5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Deployment Instructions
+
+### Production Build
+
+1. Create a production build:
+```bash
+npm run build
+```
+
+2. Start the production server:
+```bash
+npm start
+```
+
+### Deploy on Vercel
+
+1. Push your code to GitHub
+2. Connect your repository to [Vercel](https://vercel.com)
+3. **Important**: Set up a PostgreSQL database for production:
+   - Go to Vercel Dashboard → Storage → Create Database → Postgres
+   - Copy the connection string
+4. Set up environment variables in Vercel:
+   - `DATABASE_URL`: Your PostgreSQL connection string from step 3
+5. **Before deploying**: Update your `prisma/schema.prisma`:
+   ```prisma
+   datasource db {
+     provider = "postgresql"  // Change from "sqlite" to "postgresql"
+     url      = env("DATABASE_URL")
+   }
+   ```
+6. Deploy your application
+7. **After first deployment**: Run database migrations:
+   - Go to Vercel → Functions → Run `npx prisma migrate deploy`
+   - Or use Vercel CLI: `vercel env pull` then `npx prisma db push`
+
+#### Troubleshooting API 500 Errors
+- Check `/api/health` endpoint to verify database connection
+- Ensure `DATABASE_URL` environment variable is correctly set
+- Verify Prisma schema uses `postgresql` provider for production
+
+### Deploy on Other Platforms
+
+For other platforms (Railway, Render, etc.):
+1. Build the application: `npm run build`
+2. Set the start command to: `npm start`
+3. Set Node.js version to 18+
+4. Configure environment variables including PostgreSQL `DATABASE_URL`
+
 ## Tech Decisions
 
 ### Frontend Framework

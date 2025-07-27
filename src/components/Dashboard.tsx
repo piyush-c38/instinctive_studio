@@ -41,10 +41,10 @@ export default function Dashboard() {
       setError(null)
       const response = await fetch('/api/incidents')
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(`HTTP error! status: ${response.status}. ${errorData.details || ''}`)
       }
       const data = await response.json()
-      // Ensure data is an array
       const incidentsArray = Array.isArray(data) ? data : []
       setIncidents(incidentsArray)
       if (incidentsArray.length > 0) {
@@ -52,8 +52,28 @@ export default function Dashboard() {
       }
     } catch (error) {
       console.error('Failed to fetch incidents:', error)
-      setError('Failed to load incidents. Please try again.')
-      setIncidents([]) // Set to empty array on error
+      setError('Failed to load incidents. Please check your internet connection and try again.')
+      
+      if (process.env.NODE_ENV === 'development') {
+        const mockData = [
+          {
+            id: 'mock-1',
+            cameraId: 'cam-1',
+            camera: { id: 'cam-1', name: 'Camera - 01', location: 'Shop Floor' },
+            type: 'Unauthorised Access',
+            tsStart: new Date().toISOString(),
+            tsEnd: null,
+            thumbnailUrl: '',
+            resolved: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          }
+        ]
+        setIncidents(mockData)
+        setSelectedIncident(mockData[0])
+      } else {
+        setIncidents([]) 
+      }
     } finally {
       setLoading(false)
     }
@@ -111,7 +131,7 @@ export default function Dashboard() {
   if (error) {
     return (
       <div className="h-screen bg-[#0a1530] text-white flex items-center justify-center flex-col">
-        <div className="text-xl mb-4">⚠️ {error}</div>
+        <div className="text-xl mb-4"> {error}</div>
         <button 
           onClick={() => {
             setLoading(true)
