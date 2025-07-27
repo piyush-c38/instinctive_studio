@@ -99,7 +99,7 @@ export default function IncidentTimeline({
                     ))}
                   </div>
                   
-                  {incidents
+                  {(incidents || [])
                     .filter(incident => incident.camera.name === camera.name)
                     .map((incident) => (
                       <div

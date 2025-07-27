@@ -37,7 +37,7 @@ export default function IncidentPlayer({ incident, onIncidentSelect, incidents }
   const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate())
   const endOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1)
 
-  const todaysIncidents = incidents.filter(inc => {
+  const todaysIncidents = (incidents || []).filter(inc => {
     const incidentTime = new Date(inc.tsStart)
     return incidentTime >= startOfDay && incidentTime < endOfDay
   })

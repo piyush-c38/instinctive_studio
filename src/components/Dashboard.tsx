@@ -30,6 +30,7 @@ export default function Dashboard() {
   const [incidents, setIncidents] = useState<Incident[]>([])
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchIncidents()
@@ -37,14 +38,22 @@ export default function Dashboard() {
 
   const fetchIncidents = async () => {
     try {
+      setError(null)
       const response = await fetch('/api/incidents')
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
       const data = await response.json()
-      setIncidents(data)
-      if (data.length > 0) {
-        setSelectedIncident(data[0])
+      // Ensure data is an array
+      const incidentsArray = Array.isArray(data) ? data : []
+      setIncidents(incidentsArray)
+      if (incidentsArray.length > 0) {
+        setSelectedIncident(incidentsArray[0])
       }
     } catch (error) {
       console.error('Failed to fetch incidents:', error)
+      setError('Failed to load incidents. Please try again.')
+      setIncidents([]) // Set to empty array on error
     } finally {
       setLoading(false)
     }
@@ -88,13 +97,30 @@ export default function Dashboard() {
     }
   }
 
-  const unresolvedIncidents = incidents.filter(incident => !incident.resolved)
-  const cameras = Array.from(new Set(incidents.map(i => i.camera))).filter(Boolean)
+  const unresolvedIncidents = (incidents || []).filter(incident => !incident.resolved)
+  const cameras = Array.from(new Set((incidents || []).map(i => i.camera))).filter(Boolean)
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0a1530] text-white flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
+      <div className="h-screen bg-[#0a1530] text-white flex items-center justify-center">
+        <div className="text-xl">Loading SecureSight Dashboard...</div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="h-screen bg-[#0a1530] text-white flex items-center justify-center flex-col">
+        <div className="text-xl mb-4">⚠️ {error}</div>
+        <button 
+          onClick={() => {
+            setLoading(true)
+            fetchIncidents()
+          }}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white"
+        >
+          Retry
+        </button>
       </div>
     )
   }

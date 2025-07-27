@@ -79,7 +79,7 @@ export default function IncidentList({
         })
     }
 
-    const unresolvedIncidents = incidents.filter(incident => !incident.resolved)
+    const unresolvedIncidents = (incidents || []).filter(incident => !incident.resolved)
 
     return (
         <div className="h-full bg-gray-900/50 flex flex-col">
@@ -91,7 +91,7 @@ export default function IncidentList({
                 <div className="flex items-center space-x-4 text-sm text-gray-400">
                     <span className="flex items-center space-x-1">
                         <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                        <span>{incidents.filter(i => !i.resolved && i.type === 'Unauthorised Access').length} resolved incidents</span>
+                        <span>{(incidents || []).filter(i => !i.resolved && i.type === 'Unauthorised Access').length} resolved incidents</span>
                     </span>
                 </div>
             </div>
