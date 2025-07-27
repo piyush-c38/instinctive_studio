@@ -16,7 +16,9 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; connect-src 'self' https:; img-src 'self' data: https:; font-src 'self';",
+            value: process.env.NODE_ENV === 'production' 
+              ? "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; connect-src 'self' https: wss:; img-src 'self' data: https:; font-src 'self' https:; frame-src 'none';"
+              : "default-src 'self' 'unsafe-eval' 'unsafe-inline'; connect-src 'self' ws: wss: http: https:;",
           },
           {
             key: 'X-Frame-Options',
@@ -25,6 +27,10 @@ const nextConfig: NextConfig = {
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
           },
         ],
       },
@@ -39,6 +45,9 @@ const nextConfig: NextConfig = {
   env: {
     NODE_ENV: process.env.NODE_ENV,
   },
+  
+  // Disable source maps in production for security
+  productionBrowserSourceMaps: false,
 };
 
 export default nextConfig;
