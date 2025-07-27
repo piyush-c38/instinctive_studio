@@ -3,14 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
-  // For production on Vercel, switch to PostgreSQL:
-  // provider = "postgresql"
-  // url      = env("DATABASE_URL")
-  // Uncomment for local PostgreSQL development:
-  // provider = "postgresql"
-  // url      = env("DATABASE_URL")
 }
 
 model Camera {
